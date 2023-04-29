@@ -10,13 +10,13 @@ public class GameWindow {
 
     public GameWindow(GamePanel gamePanel){
         jframe = new JFrame();
-        
-        jframe.setLocationRelativeTo(null);
+
         jframe.add(gamePanel);
+        jframe.pack();
+        jframe.setLocationRelativeTo(null);
 
         //resize window
         jframe.setResizable(false);
-        jframe.pack();
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setVisible(true);
         jframe.addWindowFocusListener(new WindowFocusListener() {
