@@ -1,9 +1,18 @@
 package Utilize;
 
+import Entities.Crabby;
 import Main.Game;
+import Objects.GameContainer;
+import Objects.Potion;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.awt.Point;
+
+import static Utilize.Constants.EnemyConstant.CRABBY;
+import static Utilize.Constants.ObjectConstants.*;
 
 public class HelpMethods {
     public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvData) {
@@ -110,5 +119,82 @@ public class HelpMethods {
         else {
             return isAllTileWalkable(firstXTile, secondXTile, yTile, lvData);
         }
+    }
+
+    public static int[][] GetLevelData(BufferedImage img) {
+        int[][] lvData = new int[img.getHeight()][img.getWidth()];
+
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getRed();
+                if (value >= 48) {
+                    value = 0;
+                }
+                lvData[i][j] = value;
+            }
+        }
+        return lvData;
+    }
+
+    public static ArrayList<Crabby> GetCrabs(BufferedImage img){
+        ArrayList<Crabby> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getGreen();
+                if (value == CRABBY) {
+                    list.add(new Crabby(j * Game.TILES_SIZE, i * Game.TILES_SIZE));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Potion> GetPotions(BufferedImage img){
+        ArrayList<Potion> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getBlue();
+                if (value == RED_POTION) {
+                    list.add(new Potion(j * Game.TILES_SIZE, i * Game.TILES_SIZE, RED_POTION));
+                }
+                else if(value == BLUE_POTION) {
+                    list.add(new Potion(j * Game.TILES_SIZE, i * Game.TILES_SIZE, BLUE_POTION));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<GameContainer> GetContainer(BufferedImage img){
+        ArrayList<GameContainer> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getBlue();
+                if (value == BOX) {
+                    list.add(new GameContainer(j * Game.TILES_SIZE, i * Game.TILES_SIZE, BOX));
+                }
+                else if(value == BARREL) {
+                    list.add(new GameContainer(j * Game.TILES_SIZE, i * Game.TILES_SIZE, BARREL));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static Point GetPlayerSpawn(BufferedImage img){
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getGreen();
+                if (value == 100) {
+                    return new Point(j * Game.TILES_SIZE, i * Game.TILES_SIZE);
+                }
+            }
+        }
+        return new Point(1 * Game.TILES_SIZE, 1 * Game.TILES_SIZE);
     }
 }

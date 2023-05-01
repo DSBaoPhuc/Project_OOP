@@ -2,6 +2,7 @@ package UI;
 
 import static Utilize.Constants.UI.URMButtons.*;
 
+import GameStates.GameStates;
 import GameStates.Playing;
 import Main.Game;
 import Utilize.LoadSave;
@@ -32,32 +33,65 @@ public class LevelCompletedOverlay {
 
     private void initImg() {
         img = LoadSave.GetSpriteAtlas(LoadSave.COMPLETED_IMG);
-        bgX = ((Game.GAME_WIDTH / 2) - bgW / 2);
-        bgY = (int) (75 * Game.SCALE);
         bgW = (int) (img.getWidth() * Game.SCALE);
         bgH = (int) (img.getHeight() * Game.SCALE);
+        bgX = ((Game.GAME_WIDTH / 2) - bgW / 2);
+        bgY = (int) (75 * Game.SCALE);
     }
 
     public void draw(Graphics g){
+
+
         g.drawImage(img, bgX, bgY, bgW, bgH, null);
         next.draw(g);
         menu.draw(g);
     }
 
     public void update(){
+        next.update();
+        menu.update();
+    }
 
+    private boolean isIn(URMButton b, MouseEvent e){
+        return b.getBounds().contains(e.getX(), e.getY());
     }
 
     public void mouseMoved(MouseEvent e){
+        next.setMouseOver(false);
+        menu.setMouseOver(false);
 
+        if(isIn(menu, e)){
+            menu.setMouseOver(true);
+        }
+        else if(isIn(next, e)) {
+            next.setMouseOver(true);
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
+        if (isIn(menu, e)) {
+            if (menu.isMousePressed()) {
+                playing.resetAll();
+                GameStates.state = GameStates.MENU;
+            }
+        }
+        else if (isIn(next, e)) {
+            if (next.isMousePressed()) {
+                playing.loadNextLevel();
+            }
+        }
 
+        menu.resetBools();
+        next.resetBools();
     }
 
     public void mousePressed(MouseEvent e) {
-
+        if(isIn(menu, e)){
+            menu.setMousePressed(true);
+        }
+        else if (isIn(next, e)) {
+            next.setMousePressed(true);
+        }
     }
 
 }

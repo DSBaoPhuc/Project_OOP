@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import GameStates.Menu;
 import GameStates.Playing;
+import Utilize.LoadSave;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;

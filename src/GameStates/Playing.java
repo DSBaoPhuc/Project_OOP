@@ -5,6 +5,7 @@ import Entities.Player;
 import Levels.LevelManager;
 
 import Main.Game;
+import Objects.ObjectManager;
 import UI.GameOverOverlay;
 import UI.LevelCompletedOverlay;
 import UI.PauseOverlay;
@@ -20,6 +21,7 @@ public class Playing extends State implements StateMethods {
     private Player player;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
+    private ObjectManager objectManager;
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
@@ -28,63 +30,90 @@ public class Playing extends State implements StateMethods {
     private int xLvOffset;
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
-    private int lvTilesWide = LoadSave.GetLevelData()[0].length;
-    private int maxTilesOffset = lvTilesWide - Game.TILES_IN_WIDTH;
-    private int maxLvOffsetX = maxTilesOffset * Game.TILES_SIZE;
+    private int maxLvOffsetX;
 
     private boolean gameOver;
-
+    private boolean lvCompleted;
     private BufferedImage backgroundImg;
+
+
 
     public Playing(Game game) {
         super(game);
         initClasses();
 
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
+
+        calculateLevelOffset();
+        loadStartLevel();
     }
+
 
     private void initClasses() {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
+        objectManager = new ObjectManager((this));
+
         player = new Player(200,200, (int)(64 * Game.SCALE), (int)(40 * Game.SCALE), this);
         player.loadLevelData(levelManager.getCurrentLevel().getLevelData());
+        player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
+
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
     }
 
-
     @Override
     public void update() {
-        if(!paused && !gameOver) {
+        if(paused){
+            pauseOverlay.update();
+        }
+        else if (lvCompleted) {
+            levelCompletedOverlay.update();
+        }
+        else if(!gameOver){
             levelManager.update();
+            objectManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseBorder();
-        }
-        else {
-            pauseOverlay.update();
         }
     }
 
     @Override
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-        //drawClouds(g);
 
         levelManager.draw(g, xLvOffset);
         player.render(g, xLvOffset);
         enemyManager.draw(g, xLvOffset);
+        objectManager.draw(g, xLvOffset);
 
         if (paused) {
             g.setColor(new Color(0,0,0,150));
             g.fillRect(0,0,Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
-        } else if (gameOver) {
+        } 
+        else if (gameOver) {
             gameOverOverlay.draw(g);
+        } else if (lvCompleted) {
+            levelCompletedOverlay.draw(g);
         }
+    }
 
-//        levelCompletedOverlay.draw(g);
+    public void loadNextLevel(){
+        resetAll();
+        levelManager.loadNextLevel();
+        player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
+    }
+
+    private void loadStartLevel() {
+        enemyManager.loadEnemies(levelManager.getCurrentLevel());
+        objectManager.loadObject(levelManager.getCurrentLevel());
+    }
+
+    private void calculateLevelOffset() {
+        maxLvOffsetX = levelManager.getCurrentLevel().getLvOffset();
     }
 
     private void checkCloseBorder(){
@@ -109,14 +138,25 @@ public class Playing extends State implements StateMethods {
     public void resetAll() {
         gameOver = false;
         paused = false;
+
+        lvCompleted = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+
+        objectManager.resetAllObj();
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox){
         enemyManager.checkEnemyHit(attackBox);
     }
 
+    public void checkPotionTouched(Rectangle2D.Float hitbox){
+        objectManager.checkObjTouchPlayer(hitbox);
+    }
+
+    public void checkObjHit(Rectangle2D.Float attackBox){
+        objectManager.checkObjHit(attackBox);
+    }
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
@@ -143,6 +183,9 @@ public class Playing extends State implements StateMethods {
             if (paused) {
                 pauseOverlay.mousePressed(e);
             }
+            else if (lvCompleted) {
+                levelCompletedOverlay.mousePressed(e);
+            }
         }
     }
 
@@ -152,6 +195,9 @@ public class Playing extends State implements StateMethods {
             if (paused) {
                 pauseOverlay.mouseReleased(e);
             }
+            else if (lvCompleted) {
+                levelCompletedOverlay.mouseReleased(e);
+            }
         }
     }
 
@@ -160,6 +206,9 @@ public class Playing extends State implements StateMethods {
         if(!gameOver) {
             if (paused) {
                 pauseOverlay.mouseMoved(e);
+            }
+            else if (lvCompleted) {
+                levelCompletedOverlay.mouseMoved(e);
             }
         }
     }
@@ -212,6 +261,12 @@ public class Playing extends State implements StateMethods {
         }
     }
 
+    public void setLevelCompleted (boolean levelCompleted) {
+        this.lvCompleted = levelCompleted;
+    }
+    public void setMaxLvOffset(int lvOffset){
+        this.maxLvOffsetX = lvOffset;
+    }
 
     public Player getPlayer(){
         return player;
@@ -219,6 +274,14 @@ public class Playing extends State implements StateMethods {
 
     public void windowFocusLost() {
         player.resetDirBoolean();
+    }
+
+    public EnemyManager getEnemyManager(){
+        return enemyManager;
+    }
+
+    public ObjectManager getObjectManager(){
+        return  objectManager;
     }
 }
 
