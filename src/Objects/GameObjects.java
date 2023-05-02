@@ -32,6 +32,9 @@ public class GameObjects {
                     doAnimation = false;
                     active = false;
                 }
+                else if(objectType == CANNON_LEFT || objectType == CANNON_RIGHT){
+                    doAnimation = false;
+                }
             }
         }
     }
@@ -41,7 +44,7 @@ public class GameObjects {
         aniTick = 0;
         active = true;
 
-        if(objectType == BARREL || objectType == BOX){
+        if(objectType == BARREL || objectType == BOX || objectType == CANNON_LEFT || objectType == CANNON_RIGHT){
             doAnimation = false;
         }
         else {

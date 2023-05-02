@@ -44,6 +44,8 @@ public class Player extends Entity {
     private int flipX = 0;
     private int flipW = 1;
 
+    private int tileY = 0;
+
     private boolean attackChecked;
     private Playing playing;
 
@@ -85,6 +87,8 @@ public class Player extends Entity {
 
         if(moving){
             checkPotionTouched();
+            checkSpikeTrapTouched();
+            tileY = (int) (hitbox.y / Game.TILES_SIZE);
         }
         if(attacking){
             checkAttack();
@@ -92,6 +96,10 @@ public class Player extends Entity {
         updateAniTick();
         setAnimation();
 
+    }
+
+    private void checkSpikeTrapTouched() {
+        playing.checkSpikeTrapTouched(this);
     }
 
     private void checkPotionTouched() {
@@ -272,6 +280,10 @@ public class Player extends Entity {
         }
     }
 
+    public void kill() {
+        currentHealth = 0;
+    }
+
     public void changePower(int value){
         System.out.println("Power");
     }
@@ -338,6 +350,10 @@ public class Player extends Entity {
 
     public void setJump(boolean jump){
         this.jump = jump;
+    }
+
+    public int getTileY(){
+        return tileY;
     }
 
 }

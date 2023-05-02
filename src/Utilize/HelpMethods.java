@@ -2,8 +2,10 @@ package Utilize;
 
 import Entities.Crabby;
 import Main.Game;
+import Objects.Cannon;
 import Objects.GameContainer;
 import Objects.Potion;
+import Objects.Spike_Trap;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -97,13 +99,31 @@ public class HelpMethods {
         }
     }
 
+    public static boolean canCannonSeePlayer(int[][] lvData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile){
+        int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+        int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
+
+        if (firstXTile > secondXTile) {
+            return isAllTilesClear(secondXTile, firstXTile, yTile, lvData);
+        }
+        else {
+            return isAllTilesClear(firstXTile, secondXTile, yTile, lvData);
+        }
+    }
+
+    public static boolean isAllTilesClear(int xStart, int xEnd, int y, int[][] lvData){
+        for (int i = 0; i < xEnd - xStart; i++)
+            if (isTileSolid(xStart + i, y, lvData))
+                return false;
+        return true;
+    }
+
     public static boolean isAllTileWalkable(int xStart, int xEnd, int y, int[][] lvData) {
-        for (int i = 0; i < xEnd - xStart; i++) {
-            if (isTileSolid(xStart + i, y, lvData)) {
-                return false;
-            }
-            if (!isTileSolid(xStart + i, y + 1, lvData)) {
-                return false;
+        if(isAllTilesClear(xStart, xEnd, y, lvData)) {
+            for (int i = 0; i < xEnd - xStart; i++) {
+                if (!isTileSolid(xStart + i, y + 1, lvData)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -179,6 +199,34 @@ public class HelpMethods {
                 }
                 else if(value == BARREL) {
                     list.add(new GameContainer(j * Game.TILES_SIZE, i * Game.TILES_SIZE, BARREL));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Spike_Trap> GetSpikeTraps(BufferedImage img){
+        ArrayList<Spike_Trap> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getBlue();
+                if (value == SPIKE_TRAP) {
+                    list.add(new Spike_Trap(j * Game.TILES_SIZE, i * Game.TILES_SIZE, SPIKE_TRAP));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Cannon> GetCannon(BufferedImage img){
+        ArrayList<Cannon> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getBlue();
+                if (value == CANNON_LEFT || value == CANNON_RIGHT) {
+                    list.add(new Cannon(j * Game.TILES_SIZE, i * Game.TILES_SIZE, value));
                 }
             }
         }

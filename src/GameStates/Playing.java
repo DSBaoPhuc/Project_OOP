@@ -73,7 +73,7 @@ public class Playing extends State implements StateMethods {
         }
         else if(!gameOver){
             levelManager.update();
-            objectManager.update();
+            objectManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseBorder();
@@ -152,6 +152,10 @@ public class Playing extends State implements StateMethods {
 
     public void checkPotionTouched(Rectangle2D.Float hitbox){
         objectManager.checkObjTouchPlayer(hitbox);
+    }
+
+    public void checkSpikeTrapTouched(Player p) {
+        objectManager.checkSpikeTrapTouched(p);
     }
 
     public void checkObjHit(Rectangle2D.Float attackBox){
@@ -283,6 +287,12 @@ public class Playing extends State implements StateMethods {
     public ObjectManager getObjectManager(){
         return  objectManager;
     }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
+
 }
 
 

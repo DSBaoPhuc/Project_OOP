@@ -2,10 +2,11 @@ package Levels;
 
 import Entities.Crabby;
 import Main.Game;
+import Objects.Cannon;
 import Objects.GameContainer;
 import Objects.Potion;
+import Objects.Spike_Trap;
 import Utilize.HelpMethods;
-import Utilize.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,10 @@ public class Level {
     private int[][] lvData;
     private ArrayList<Crabby> crabs;
     private ArrayList<Potion> potions;
+    private ArrayList<Spike_Trap> spikeTraps;
     private ArrayList<GameContainer> containers;
+
+    private ArrayList<Cannon> cannons;
     private int lvTilesWide;
     private int maxTilesOffset;
     private int maxLvOffsetX;
@@ -30,8 +34,18 @@ public class Level {
         createEnemies();
         createPotion();
         createContainer();
+        createSpikeTraps();
+        createCannon();
         calculateLvOffset();
         calculatePlayerSpawn();
+    }
+
+    private void createCannon() {
+        cannons = HelpMethods.GetCannon(img);
+    }
+
+    private void createSpikeTraps() {
+        spikeTraps = HelpMethods.GetSpikeTraps(img);
     }
 
     private void createContainer() {
@@ -80,15 +94,18 @@ public class Level {
         return playerSpawn;
     }
 
-//    public BufferedImage getImg() {
-//        return img;
-//    }
-
     public ArrayList<Potion> getPotions() {
         return potions;
     }
 
     public ArrayList<GameContainer> getContainers() {
         return containers;
+    }
+
+    public ArrayList<Spike_Trap> getSpikeTraps(){
+        return spikeTraps;
+    }
+    public ArrayList<Cannon> getCannons(){
+        return cannons;
     }
 }
