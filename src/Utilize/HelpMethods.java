@@ -2,10 +2,7 @@ package Utilize;
 
 import Entities.Crabby;
 import Main.Game;
-import Objects.Cannon;
-import Objects.GameContainer;
-import Objects.Potion;
-import Objects.Spike_Trap;
+import Objects.*;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -43,6 +40,10 @@ public class HelpMethods {
         float yIndex = y / Game.TILES_SIZE;
 
         return isTileSolid((int) xIndex, (int) yIndex, lvData);
+    }
+
+    public static boolean isProjectileHittingLevel(Projectile p, int[][] lvData ){
+        return isSolid((p.getHitbox().x + p.getHitbox().width/2), (p.getHitbox().y + p.getHitbox().height/2), lvData);
     }
 
     public static boolean isTileSolid(int XTile, int YTile, int[][] lvData) {

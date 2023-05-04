@@ -12,17 +12,20 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static Utilize.Constants.ObjectConstants.*;
+import static Utilize.Constants.Projectile.*;
 import static Utilize.HelpMethods.canCannonSeePlayer;
+import static Utilize.HelpMethods.isProjectileHittingLevel;
 
 public class ObjectManager {
     private Playing playing;
     private BufferedImage[][] potionImgs, containerImgs;
     private BufferedImage[] cannonImgs;
-    private BufferedImage spike_Trap_Img;
+    private BufferedImage spike_Trap_Img, cannonBallImgs;
     private ArrayList<Potion> potions;
     private ArrayList<GameContainer> containers;
     private ArrayList<Spike_Trap> spikeTraps;
     private ArrayList<Cannon> cannons;
+    private ArrayList<Projectile> projectile = new ArrayList<>();
 
     public ObjectManager(Playing playing){
         this.playing = playing;
@@ -83,6 +86,7 @@ public class ObjectManager {
         containers = new ArrayList<>(newLevel.getContainers());
         spikeTraps = newLevel.getSpikeTraps();
         cannons = newLevel.getCannons();
+        projectile.clear();
     }
 
     private void loadImgs() {
@@ -113,6 +117,10 @@ public class ObjectManager {
         for (int i = 0; i < cannonImgs.length ; i++) {
             cannonImgs[i] = temp.getSubimage(i*40, 0, 40, 26);
         }
+
+        cannonBallImgs = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
+
+
     }
 
     public void update(int[][] lvData, Player player){
@@ -129,6 +137,22 @@ public class ObjectManager {
         }
 
         updateCannon(lvData, player);
+
+        updateProjectile(lvData, player);
+    }
+
+    private void updateProjectile(int[][] lvData, Player player) {
+        for(Projectile p: projectile){
+            if(p.isActive()){
+                p.updatePosition();
+                if(p.getHitbox().intersects(player.getHitbox())){
+                    player.changeHealth(-25);
+                    p.setActive(false);
+                } else if (isProjectileHittingLevel(p, lvData)) {
+                    p.setActive(false);
+                }
+            }
+        }
     }
 
     private void updateCannon(int[][] lvData, Player player) {
@@ -138,18 +162,25 @@ public class ObjectManager {
                     if(isPlayerInRange(c, player)){
                         if(isPlayerInFrontOfCannon(c,player)){
                             if(canCannonSeePlayer(lvData, player.getHitbox(), c.getHitbox(), c.getTileY())){
-                                shootCannon(c);
+                                c.setAnimation(true);
                             }
                         }
                     }
                 }
             }
             c.update();
+            if(c.getAniIndex() == 4 && c.getAniTick() == 0){
+                shootCannon(c);
+            }
         }
     }
 
     private void shootCannon(Cannon c) {
-        c.setAnimation(true);
+        int dir = 1;
+        if(c.getObjectType() == CANNON_LEFT){
+            dir = -1;
+        }
+        projectile.add(new Projectile((int)(c.getHitbox().x), (int) (c.getHitbox().y), dir )) ;
     }
 
     private boolean isPlayerInFrontOfCannon(Cannon c, Player player) {
@@ -173,10 +204,19 @@ public class ObjectManager {
         drawPotions(g, xLvOffset);
         drawContainer(g, xLvOffset);
         drawSpikeTraps(g,xLvOffset);
-        drrawCannon(g,xLvOffset);
+        drawCannon(g,xLvOffset);
+        drawProjectile(g, xLvOffset);
     }
 
-    private void drrawCannon(Graphics g, int xLvOffset) {
+    private void drawProjectile(Graphics g, int xLvOffset) {
+        for(Projectile p : projectile){
+            if(p.isActive()){
+                g.drawImage(cannonBallImgs, (int) (p.getHitbox().x - xLvOffset), (int) (p.getHitbox().y), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
+            }
+        }
+    }
+
+    private void drawCannon(Graphics g, int xLvOffset) {
         for(Cannon c: cannons){
             int x = (int)(c.getHitbox().x - xLvOffset);
             int width = CANNON_WIDTH;
