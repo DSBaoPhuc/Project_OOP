@@ -286,6 +286,9 @@ public class Playing extends State implements StateMethods {
 
     public void setLevelCompleted (boolean levelCompleted) {
         this.lvCompleted = levelCompleted;
+        if(lvCompleted){
+            game.getAudioPlayer().lvCompleted();
+        }
     }
     public void setMaxLvOffset(int lvOffset){
         this.maxLvOffsetX = lvOffset;

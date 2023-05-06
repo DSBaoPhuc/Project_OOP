@@ -62,7 +62,6 @@ public class Menu extends State implements StateMethods{
         for (MenuButton mb: buttons){
             if(isInside(e, mb)){
                 mb.setMousePressed(true);
-                break;
             }
         }
     }
@@ -71,7 +70,12 @@ public class Menu extends State implements StateMethods{
     public void mouseReleased(MouseEvent e) {
         for (MenuButton mb: buttons){
             if(isInside(e, mb)){
-                mb.applyGameState();
+                if(mb.isMousePressed()){
+                    mb.applyGameState();
+                }
+                if(mb.getState() == GameStates.PLAYING){
+                    game.getAudioPlayer().setLvSong(game.getPlaying().getLevelManager().getLvIndex());
+                }
                 break;
             }
         }
@@ -100,9 +104,7 @@ public class Menu extends State implements StateMethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            GameStates.state = GameStates.PLAYING;
-        }
+
     }
 
     @Override

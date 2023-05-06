@@ -1,12 +1,15 @@
 package Main;
 
 
+import Audio.AudioPlayer;
 import GameStates.GameStates;
 import java.awt.Graphics;
 
 import GameStates.Menu;
 import GameStates.Playing;
+import UI.AudioOptions;
 import Utilize.LoadSave;
+import GameStates.GameOptions;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;
@@ -17,6 +20,9 @@ public class Game implements Runnable {
 
     private Playing playing;
     private Menu menu;
+    private GameOptions gameOptions;
+    private AudioOptions audioOptions;
+    private AudioPlayer audioPlayer;
 
     public static final int TILES_DEFAULT_SIZE = 32;
     //Scale = How much should we scale everything(player, enemies, level)
@@ -40,8 +46,12 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
+        audioOptions = new AudioOptions(this);
+        audioPlayer = new AudioPlayer();
         menu = new Menu(this);
         playing = new Playing(this);
+        gameOptions = new GameOptions(this);
+
     }
 
     private void startGameLoop(){
@@ -59,9 +69,9 @@ public class Game implements Runnable {
                 playing.update();
                 break;
             case OPTIONS:
-
+                gameOptions.update();
+                break;
             case QUIT:
-
             default:
                 System.exit(0);
                 break;
@@ -77,7 +87,9 @@ public class Game implements Runnable {
             case PLAYING:
                 playing.draw(g);
                 break;
-
+            case OPTIONS:
+                gameOptions.draw(g);
+                break;
             default:
                 break;
         }
@@ -140,5 +152,17 @@ public class Game implements Runnable {
     }
     public Playing getPlaying(){
         return playing;
+    }
+
+    public AudioOptions getAudioOptions(){
+        return audioOptions;
+    }
+
+    public GameOptions getGameOptions(){
+        return gameOptions;
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }
