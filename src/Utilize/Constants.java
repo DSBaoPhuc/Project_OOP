@@ -4,7 +4,7 @@ import Main.Game;
 
 public class Constants {
     public static final float GRAVITY = 0.04f * Game.SCALE;
-    public static final int ANI_SPEED = 25;
+    public static final int ANI_SPEED = 20;
     public static class Projectile{
         public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
         public static final int CANNON_BALL_DEFAULT_HEIGHT = 15;
@@ -12,7 +12,7 @@ public class Constants {
         public static final int CANNON_BALL_WIDTH = (int) (CANNON_BALL_DEFAULT_WIDTH * Game.SCALE);
         public static final int CANNON_BALL_HEIGHT = (int) (CANNON_BALL_DEFAULT_HEIGHT * Game.SCALE);
 
-        public static final float SPEED = 0.75f * Game.SCALE;
+        public static final float SPEED = 0.5f * Game.SCALE;
 
 
     }
