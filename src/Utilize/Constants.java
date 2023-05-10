@@ -27,8 +27,8 @@ public class Constants {
         public static final int CANNON_LEFT = 5;
         public static final int CANNON_RIGHT = 6;
 
-        public static final int RED_POTION_VALUE = 15;
-        public static final int BLUE_POTION_VALUE = 10;
+        public static final int RED_POTION_VALUE = 20;
+        public static final int BLUE_POTION_VALUE = 20;
 
         public static final int CONTAINER_WIDTH_DEFAULT = 40;
         public static final int CONTAINER_HEIGHT_DEFAULT = 30;

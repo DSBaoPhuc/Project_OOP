@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class LoadSave {
-    public static final String PLAYER_ATLAS = "player_sprites1.png";
+    public static final String PLAYER_ATLAS = "player_sprites.png";
     public static final String LEVEL_ATLAS = "outside_sprites.png";
 
     public static final String MENU_BUTTONS = "button_atlas.png";
@@ -27,7 +27,7 @@ public class LoadSave {
     public static final String POTION_ATLAS = "potions_sprites.png";
     public static final String TRAP_ATLAS = "trap_atlas.png";
     public static final String CANNON_ATLAS = "cannon_atlas.png";
-    public static final String CANNON_BALL = "ball.png";
+    public static final String CANNON_BALL = "projectile.png";
     public static final String DEATH_SCREEN = "death_screen.png";
     public static final String OPTIONS_MENU = "options_background.png";
 

@@ -197,7 +197,7 @@ public class ObjectManager {
 
     private boolean isPlayerInRange(Cannon c, Player player) {
         int absValue = (int) (Math.abs(player.getHitbox().x - c.getHitbox().x));
-        return absValue <= Game.TILES_SIZE * 5;
+        return absValue <= Game.TILES_SIZE * 7;
     }
 
     public void draw(Graphics g, int xLvOffset){

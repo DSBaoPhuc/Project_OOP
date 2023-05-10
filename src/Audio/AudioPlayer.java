@@ -125,7 +125,7 @@ public class AudioPlayer {
             booleanControl.setValue(effectMute);
         }
         if (!effectMute)
-            playEffect(JUMP);
+            playEffect(ATTACK_1);
     }
 
     public void playEffect(int effect){
