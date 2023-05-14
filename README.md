@@ -2,8 +2,6 @@
 
 # Warrior Adventure
 
-[VI](README_vi-VN.md)
-
 Game final project for the IU' 2022 Object-Oriented Programming course.
 
 ## My Team
