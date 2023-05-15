@@ -2,7 +2,8 @@ package Objects;
 
 import Main.Game;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
 import static Utilize.Constants.ANI_SPEED;

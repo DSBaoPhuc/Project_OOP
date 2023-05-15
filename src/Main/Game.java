@@ -1,15 +1,13 @@
 package Main;
 
-
 import Audio.AudioPlayer;
 import GameStates.GameStates;
-import java.awt.Graphics;
-
 import GameStates.Menu;
 import GameStates.Playing;
 import UI.AudioOptions;
-import Utilize.LoadSave;
 import GameStates.GameOptions;
+
+import java.awt.Graphics;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;

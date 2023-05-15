@@ -4,7 +4,7 @@ import GameStates.GameStates;
 import Main.Game;
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 

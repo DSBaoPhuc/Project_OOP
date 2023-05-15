@@ -4,7 +4,7 @@ import Main.Game;
 
 public class Constants {
     public static final float GRAVITY = 0.04f * Game.SCALE;
-    public static final int ANI_SPEED = 20;
+    public static final int ANI_SPEED = 30;
     public static class Projectile{
         public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
         public static final int CANNON_BALL_DEFAULT_HEIGHT = 15;
@@ -132,7 +132,7 @@ public class Constants {
     }
 
     public static class EnemyConstant{
-        public static final int CRABBY = 0;
+        public static final int MONSTER = 0;
 
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
@@ -140,18 +140,18 @@ public class Constants {
         public static final int HIT = 3;
         public static final int DEAD = 4;
 
-        public static final int CRABBY_WIDTH_DEFAULT = 72;
-        public static final int CRABBY_HEIGHT_DEFAULT = 32;
+        public static final int MONSTER_WIDTH_DEFAULT = 72;
+        public static final int MONSTER_HEIGHT_DEFAULT = 32;
 
-        public static final int CRABBY_WIDTH = (int) (CRABBY_WIDTH_DEFAULT * Game.SCALE);
-        public static final int CRABBY_HEIGHT = (int) (CRABBY_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int MONSTER_WIDTH = (int) (MONSTER_WIDTH_DEFAULT * Game.SCALE);
+        public static final int MONSTER_HEIGHT = (int) (MONSTER_HEIGHT_DEFAULT * Game.SCALE);
 
-        public static final int CRABBY_DRAWOFFSET_X = (int) (26 * Game.SCALE);
-        public static final int CRABBY_DRAWOFFSET_Y = (int) (9 * Game.SCALE);
+        public static final int MONSTER_DRAWOFFSET_X = (int) (26 * Game.SCALE);
+        public static final int MONSTER_DRAWOFFSET_Y = (int) (9 * Game.SCALE);
 
         public static int getSpriteAmount(int enemy_type, int enemy_state){
             switch (enemy_type){
-                case CRABBY:
+                case MONSTER:
                     switch (enemy_state){
                         case IDLE:
                             return 9;
@@ -169,7 +169,7 @@ public class Constants {
         }
         public static int getMaxHealth(int enemy_type){
             switch (enemy_type){
-                case CRABBY:
+                case MONSTER:
                     return 10;
                     default:
                         return 1;
@@ -178,7 +178,7 @@ public class Constants {
 
         public static int getEnemyDamage(int enemy_type){
             switch (enemy_type){
-                case CRABBY:
+                case MONSTER:
                     return 15;
                 default:
                     return 0;

@@ -6,7 +6,7 @@ import Levels.Level;
 import Main.Game;
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -50,8 +50,6 @@ public class ObjectManager {
                 }
             }
         }
-
-
     }
 
     public void applyEffectToPlayer(Potion p){

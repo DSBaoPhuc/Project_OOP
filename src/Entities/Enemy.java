@@ -2,7 +2,6 @@ package Entities;
 
 import Main.Game;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import static Utilize.Constants.*;

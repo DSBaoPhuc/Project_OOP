@@ -32,6 +32,5 @@ public class GameContainer extends GameObjects{
         if(doAnimation){
             updateAniTick();
         }
-
     }
 }

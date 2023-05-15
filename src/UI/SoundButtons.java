@@ -2,7 +2,7 @@ package UI;
 
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import static Utilize.Constants.UI.PauseButtons.*;

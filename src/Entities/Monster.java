@@ -2,18 +2,17 @@ package Entities;
 
 import Main.Game;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import static Utilize.Constants.Directions.*;
 import static Utilize.Constants.EnemyConstant.*;
 
-public class Crabby extends Enemy {
+public class Monster extends Enemy {
     //Attack
     private int attackBoxOffsetX;
 
-    public Crabby(float x, float y) {
-        super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
+    public Monster(float x, float y) {
+        super(x, y, MONSTER_WIDTH, MONSTER_HEIGHT, MONSTER);
         initHitbox(22, 19);
         initAttackBox();
     }

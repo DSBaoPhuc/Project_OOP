@@ -11,7 +11,8 @@ import UI.LevelCompletedOverlay;
 import UI.PauseOverlay;
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -254,9 +255,9 @@ public class Playing extends State implements StateMethods {
                 case KeyEvent.VK_D:
                     player.setRight(true);
                     break;
-//            case KeyEvent.VK_SPACE:
-//                player.setJump(true);
-//                break;
+                case KeyEvent.VK_SPACE:
+                    player.setJump(true);
+                    break;
                 case KeyEvent.VK_W:
                     player.setJump(true);
                     break;
@@ -276,9 +277,9 @@ public class Playing extends State implements StateMethods {
                 case KeyEvent.VK_D:
                     player.setRight(false);
                     break;
-//            case KeyEvent.VK_SPACE:
-//                player.setJump(false);
-//                break;
+                case KeyEvent.VK_SPACE:
+                    player.setJump(false);
+                    break;
                 case KeyEvent.VK_W:
                     player.setJump(false);
                     break;

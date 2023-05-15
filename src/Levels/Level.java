@@ -1,6 +1,6 @@
 package Levels;
 
-import Entities.Crabby;
+import Entities.Monster;
 import Main.Game;
 import Objects.Cannon;
 import Objects.GameContainer;
@@ -8,7 +8,7 @@ import Objects.Potion;
 import Objects.Spike_Trap;
 import Utilize.HelpMethods;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ import static Utilize.HelpMethods.*;
 public class Level {
     private BufferedImage img;
     private int[][] lvData;
-    private ArrayList<Crabby> crabs;
+    private ArrayList<Monster> monters;
     private ArrayList<Potion> potions;
     private ArrayList<Spike_Trap> spikeTraps;
     private ArrayList<GameContainer> containers;
@@ -67,7 +67,7 @@ public class Level {
     }
 
     private void createEnemies() {
-        crabs = GetCrabs(img);
+        monters = GetMonsters(img);
     }
 
     private void createLevelData() {
@@ -86,8 +86,8 @@ public class Level {
         return maxLvOffsetX;
     }
 
-    public ArrayList<Crabby> getCrabs(){
-        return crabs;
+    public ArrayList<Monster> getMonsters(){
+        return monters;
     }
 
     public Point getPlayerSpawn(){

@@ -3,7 +3,7 @@ package UI;
 import GameStates.GameStates;
 import Main.Game;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import static Utilize.Constants.UI.PauseButtons.SOUND_SIZE;

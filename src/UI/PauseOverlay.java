@@ -2,16 +2,13 @@ package UI;
 
 import GameStates.*;
 import Main.Game;
-import Utilize.Constants;
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import static Utilize.Constants.UI.PauseButtons.*;
 import static Utilize.Constants.UI.URMButtons.*;
-import static Utilize.Constants.UI.VolumeButtons.*;
 
 public class PauseOverlay {
     private BufferedImage backgroundImg;

@@ -2,8 +2,6 @@ package Objects;
 
 import Main.Game;
 
-import java.awt.*;
-
 public class Cannon extends GameObjects{
     private int tileY;
     public Cannon(int x, int y, int objectType){
@@ -25,7 +23,4 @@ public class Cannon extends GameObjects{
         return tileY;
     }
 
-    public void draw(Graphics g){
-
-    }
 }

@@ -1,16 +1,16 @@
 package Utilize;
 
-import Entities.Crabby;
+import Entities.Monster;
 import Main.Game;
 import Objects.*;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.awt.Point;
 
-import static Utilize.Constants.EnemyConstant.CRABBY;
+import static Utilize.Constants.EnemyConstant.MONSTER;
 import static Utilize.Constants.ObjectConstants.*;
 
 public class HelpMethods {
@@ -163,14 +163,14 @@ public class HelpMethods {
         return lvData;
     }
 
-    public static ArrayList<Crabby> GetCrabs(BufferedImage img){
-        ArrayList<Crabby> list = new ArrayList<>();
+    public static ArrayList<Monster> GetMonsters(BufferedImage img){
+        ArrayList<Monster> list = new ArrayList<>();
         for (int i = 0; i < img.getHeight(); i++) {
             for (int j = 0; j < img.getWidth(); j++) {
                 Color color = new Color(img.getRGB(j, i));
                 int value = color.getGreen();
-                if (value == CRABBY) {
-                    list.add(new Crabby(j * Game.TILES_SIZE, i * Game.TILES_SIZE));
+                if (value == MONSTER) {
+                    list.add(new Monster(j * Game.TILES_SIZE, i * Game.TILES_SIZE));
                 }
             }
         }

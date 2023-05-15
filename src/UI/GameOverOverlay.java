@@ -5,7 +5,8 @@ import GameStates.Playing;
 import Main.Game;
 import Utilize.LoadSave;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;

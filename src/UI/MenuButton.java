@@ -3,11 +3,10 @@ package UI;
 import GameStates.GameStates;
 import Utilize.LoadSave;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
+import java.awt.Rectangle;
+import java.awt.Graphics;
 
-import static Utilize.Constants.UI.*;
 import static Utilize.Constants.UI.Buttons.*;
 
 public class MenuButton {

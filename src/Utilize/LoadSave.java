@@ -20,7 +20,7 @@ public class LoadSave {
     public static final String VOLUME_BUTTONS = "volume_buttons.png";
     public static final String MENU_BACKGROUND_IMG = "bg2D.png";
     public static final String PLAYING_BACKGROUND_IMG = "playing_bg_2d.png";
-    public static final String CRABBY_SPRITE = "crabby_sprite.png";
+    public static final String MONSTER_SPRITE = "snow_monster_sprite.png";
     public static final String STATUS_BAR = "health_power_bar.png";
     public static final String COMPLETED_IMG = "completed_sprite.png";
     public static final String CONTAINER_ATLAS = "objects_sprites.png";
