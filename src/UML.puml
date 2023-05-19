@@ -1,0 +1,848 @@
+@startuml
+
+package Audio{
+    class AudioPlayer {
+        + {static} int MENU_1 = 0
+        + {static} int LEVEL_1 = 1
+        + {static} int LEVEL_2 = 2
+        + {static} int DIE = 0
+        + {static} int JUMP = 1
+        + {static} int GAMEOVER = 2
+        + {static} int LVL_COMPLETED = 3
+        + {static} int ATTACK_1 = 4
+        + {static} int ATTACK_2 = 5
+        + {static} int ATTACK_3 = 6
+        - Clip[] songs, effects
+        - int currentSongId
+        - float volume = 1f
+        - boolean songMute, effectMute
+
+            + AudioPlayer()
+            + void setVolume(float volume)
+            + void stopSong()
+            + void setLvSong(int lvIndex)
+            + void lvCompleted()
+            + void toggleEffectMute()
+            + void playEffect(int effect)
+            + void playAtkSound()
+            + void toggleSongMute()
+            + void playSong(int song)
+            - Clip getCLip(String name)
+            - void loadSong()
+            - void loadEffect()
+            - void updateSongVolume()
+            - void updateEffectVolume()
+            - Random rand = new Random()
+    }
+}
+
+package Entities{
+    class Enemy extends Entity{
+        # int enemyType
+        # boolean firstUpdate = true
+        # float walkSpeed = 0.5f * Game.SCALE
+        # float walkDirection = LEFT
+        # int tileY
+        # float attackDistance = Game.TILES_SIZE
+        # boolean active = true
+        # boolean attackChecked
+
+            + Enemy(float x, float y, int width, int height, int enemyType)
+            + void hurt(int amount)
+            + void resetEnemy()
+            + boolean isActive()
+            - boolean isPlayerInRange(Player player)
+            # void firstUpdateCheck(int[][] lvData)
+            # void updateInAir(int[][] lvData)
+            # void move(int[][] lvData)
+            # void turnTowardsPlayer(Player player)
+            # boolean canSeePlayer(int[][] lvData, Player player)
+            # boolean isPlayerCloseForAttack(Player player)
+            # void newState(int enemyState)
+            # void checkPlayerHit(Rectangle2D.Float attackBox, Player player)
+            # void updateAniTick()
+            # void changWalkDirection()
+
+    }
+    class EnemyManager {
+        - Playing playing
+        - BufferedImage[][] monsterArr
+        - ArrayList <Monster> mons
+
+            + EnemyManager(Playing playing)
+            + void loadEnemies(Level level)
+            + void checkEnemyHit(Rectangle2D.Float attackBox)
+            + void resetAllEnemies()
+            + void update(int[][] lvData, Player player)
+            + void draw(Graphics g, int xLvOffset)
+            - void loadEnemyImgs()
+            - void drawMonsters(Graphics g, int xLvOffset)
+    }
+
+    abstract class Entity {
+        # float x,y
+        # int width,height
+        # Rectangle2D.Float hitbox
+        # int aniTick, aniIndex
+        # int state
+        # float airSpeed
+        # boolean inAir = false
+        # int maxHealth
+        # int currentHealth
+        # Rectangle2D.Float attackBox
+        # float walkSpeed = 1.0f * Game.SCALE
+
+            + Entity (float x, float y, int width, int height)
+            + int getState()
+            + Rectangle2D.Float getHitbox()
+            + int getAniIndex()
+            + int getCurrentHealth()
+            # void drawAttack(Graphics g, int xlvOffset)
+            # void drawHitbox(Graphics g, int xLvOffset)
+            # void initHitbox(int width, int height)
+
+    }
+
+    class Monster extends Enemy {
+        + Monster(float x, float y)
+        + void update(int[][] lvData, Player player)
+        + int flipX()
+        + int flipW()
+        - void initAttackBox()
+        - int attackBoxOffsetX
+        - void updateAttackBox()
+        - void updateBehavior(int[][] lvData, Player player)
+    }
+
+    class Player extends Entity {
+        - BufferedImage[][] animations
+        - boolean left,right,jump
+        - boolean moving = false, attacking = false
+        - int[][] levelData
+        - float xDrawOffset = 21 * Game.SCALE
+        - float yDrawOffset = 4 * Game.SCALE
+        - float jumpSpeed = -2.25f * Game.SCALE
+        - float fallSpeedAfterCollision = 0.5f * Game.SCALE
+        - BufferedImage statusBarImg
+        - int statusBarWidth = (int) (192 * Game.SCALE)
+        - int statusBarHeight = (int) (58 * Game.SCALE)
+        - int statusBarX = (int) (10 * Game.SCALE)
+        - int statusBarY = (int) (10 * Game.SCALE)
+        - int healthBarWidth = (int) (150 * Game.SCALE)
+        - int healthBarHeight = (int) (4 * Game.SCALE)
+        - int healthBarXStart = (int) (34 * Game.SCALE)
+        - int healthBarYStart = (int) (14 * Game.SCALE)
+        - int healthWidth = healthBarWidth
+        - int flipX = 0
+        - int flipW = 1
+        - int tileY = 0
+        - boolean attackChecked
+        - Playing playing
+        - int powerBarWidth = (int) (104 * Game.SCALE)
+        - int powerBarHeight = (int) (2 * Game.SCALE)
+        - int powerBarXStart = (int) (44 * Game.SCALE)
+        - int powerBarYStart = (int) (34 * Game.SCALE)
+        - int powerWidth = powerBarWidth
+        - int powerMaxValue = 200
+        - int powerValue = powerMaxValue
+        - boolean powerAttackActive
+        - int powerAttackTick
+        - int powerGrowSpeed = 15
+        - int powerGrowTick
+
+            + Player(float x, float y, int width, int height, Playing playing)
+            + void setSpawn(Point spawn)
+            + void update()
+            + void render(Graphics g, int lvOffset)
+            + void changeHealth(int value)
+            + void kill()
+            + void changePower(int value)
+            + void loadLevelData(int[][] levelData)
+            + void resetDirBoolean()
+            + void resetAll()
+            + void setAttacking(boolean attacking)
+            + boolean getLeft()
+            + void setLeft(boolean left)
+            + boolean getRight()
+            + void setRight(boolean right)
+            + void setJump(boolean jump)
+            + int getTileY()
+            + void powerAttack()
+            - void initAttackBox()
+            - void checkSpikeTrapTouched()
+            - void checkPotionTouched()
+            - void checkAttack()
+            - void updateAttackBox()
+            - void updateHealthBar()
+            - void updatePowerBar()
+            - void drawUI(Graphics g)
+            - void updateAniTick()
+            - void setAnimation()
+            - void resetAniTick()
+            - void updatePosition()
+            - void jump()
+            - void resetInAir()
+            - void updateXPos(float xSpeed)
+            - void loadAnimation()
+            - void resetAttackBox()
+    }
+}
+
+package GameStates{
+    class GameOptions extends State implements StateMethods{
+        - AudioOptions audioOptions
+        - BufferedImage bgImg, optionsBgImg
+        - int bgX, bgY, bgW, bgH
+        - URMButton menuB
+
+            +  GameOptions(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mouseDragged(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void mouseClicked(MouseEvent e)
+            - void loadButtonn()
+            - void loadImgs()
+    }
+
+    enum GameStates {
+        PLAYING, MENU, OPTIONS, QUIT
+        +  {static} GameStates state = MENU
+    }
+
+    class Menu extends State implements StateMethods{
+        - MenuButton[] buttons = new MenuButton[3]
+        - BufferedImage backgroundImg, backgroundMenu
+        - int menuX, menuY, menuWidth, menuHeight
+
+            + Menu(Game game)
+            +  void mouseMoved(MouseEvent e)
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            - void resetButtons()
+            - void loadBackground()
+            - void loadButtons()
+
+    }
+
+    class Playing extends State implements StateMethods {
+        - Player player
+        - LevelManager levelManager
+        - EnemyManager enemyManager
+        - ObjectManager objectManager
+        - PauseOverlay pauseOverlay
+        - GameOverOverlay gameOverOverlay
+        - LevelCompletedOverlay levelCompletedOverlay
+        - boolean paused = false
+        - int xLvOffset
+        - int leftBorder = (int) (0.2 * Game.GAME_WIDTH)
+        - int rightBorder = (int) (0.8 * Game.GAME_WIDTH)
+        - int maxLvOffsetX
+        - boolean gameOver
+        - boolean lvCompleted
+        - BufferedImage backgroundImg
+        - boolean playerDying
+
+            +  Playing(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void loadNextLevel()
+            +  void resetAll()
+            +  void checkEnemyHit(Rectangle2D.Float attackBox)
+            +  void checkPotionTouched(Rectangle2D.Float hitbox)
+            +  void checkSpikeTrapTouched(Player p)
+            +  void checkObjHit(Rectangle2D.Float attackBox)
+            +  void setGameOver(boolean gameOver)
+            +  void mouseDragged(MouseEvent e)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void unpauseGame()
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void setLevelCompleted (boolean levelCompleted)
+            +  void setMaxLvOffset(int lvOffset)
+            +  Player getPlayer()
+            +  void windowFocusLost()
+            +  EnemyManager getEnemyManager()
+            +  ObjectManager getObjectManager()
+            +  LevelManager getLevelManager()
+            +  void setPlayerDying(boolean b)
+            - void initClasses()
+            - void loadStartLevel()
+            - void calculateLevelOffset()
+            - void checkCloseBorder()
+    }
+
+    class State {
+        # Game game 
+
+            +  boolean isInside(MouseEvent e, MenuButton mb)
+            +  State(Game game)
+            +  Game getGame()
+            +  void setGameState(GameStates state)
+    }
+
+    interface StateMethods {
+            +  void update() 
+            +  void draw(Graphics g) 
+            +  void mouseClicked(MouseEvent e) 
+            +  void mousePressed(MouseEvent e) 
+            +  void mouseReleased(MouseEvent e) 
+            +  void mouseMoved(MouseEvent e) 
+            +  void keyPressed(KeyEvent e) 
+            +  void keyReleased(KeyEvent e) 
+    }
+}
+
+package Inputs{
+    class KeyBoardInputs implements KeyListener {
+        - GamePanel gamePanel 
+
+            +  KeyBoardInputs(GamePanel gamePanel)
+            +  void keyTyped(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void keyPressed(KeyEvent e)
+    }
+
+    class MouseInputs implements MouseListener, MouseMotionListener {
+
+        - GamePanel gamePanel 
+
+            +  MouseInputs(GamePanel gamePanel)
+            +  void mouseMoved(MouseEvent e)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseEntered(MouseEvent e)
+            +  void mouseExited(MouseEvent e)
+            +  void mouseDragged(MouseEvent e)
+    }
+}
+
+package Levels{
+    class Level {
+        - BufferedImage img 
+        - int[][] lvData 
+        - ArrayList<Monster> monters 
+        - ArrayList<Potion> potions 
+        - ArrayList<Spike_Trap> spikeTraps 
+        - ArrayList<GameContainer> containers 
+        - ArrayList<Cannon> cannons 
+        - int lvTilesWide 
+        - int maxTilesOffset 
+        - int maxLvOffsetX 
+        - Point playerSpawn 
+
+            +  Level (BufferedImage img)
+            +  int getSpriteIndex(int x, int y)
+            +  int[][] getLevelData()
+            +  int getLvOffset()
+            +  ArrayList<Monster> getMonsters()
+            +  Point getPlayerSpawn()
+            +  ArrayList<Potion> getPotions()
+            +  ArrayList<GameContainer> getContainers()
+            +  ArrayList<Spike_Trap> getSpikeTraps()
+            +  ArrayList<Cannon> getCannons()
+            - void createCannon()
+            - void createSpikeTraps()
+            - void createContainer()
+            - void createPotion()
+            - void calculatePlayerSpawn()
+            - void calculateLvOffset()
+            - void createEnemies()
+            - void createLevelData()
+    }
+
+    class LevelManager {
+        - Game game
+        - BufferedImage[] levelSprite
+        - ArrayList<Level> levels
+        - int lvIndex = 0
+
+            +  LevelManager(Game game)
+            +  void loadNextLevel()
+            +  void draw(Graphics g, int lvOffset)
+            +  void update()
+            +  Level getCurrentLevel()
+            - void buildAllLevels()
+            - void importOutsideSprites()
+    }
+}
+
+package Main{
+    class Game implements Runnable {
+        +  {static}  int TILES_DEFAULT_SIZE = 32
+        +  {static}  float SCALE = 1.5f
+        +  {static}  int TILES_IN_WIDTH = 26
+        +  {static}  int TILES_IN_HEIGHT = 14
+        +  {static}  int TILES_SIZE = (int)(TILES_DEFAULT_SIZE * SCALE)
+        +  {static}  int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH
+        +  {static}  int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT
+        - GameWindow gameWindow
+        - GamePanel gamePanel
+        - Thread gameThread
+        -  int FPS_SET = 120
+        -  int UPS_SET = 200
+        - Playing playing
+        - Menu menu
+        - GameOptions gameOptions
+        - AudioOptions audioOptions
+        - AudioPlayer audioPlayer
+
+            +  Game()
+            +  void update()
+            +  void render(Graphics g)
+            +  void run()
+            +  void windowFocusLost()
+            +  Menu getMenu()
+            +  Playing getPlaying()
+            +  AudioOptions getAudioOptions()
+            +  GameOptions getGameOptions()
+            +  AudioPlayer getAudioPlayer()
+            - void initClasses()
+            - void startGameLoop()
+    }
+
+    class GamePanel extends JPanel {
+        - MouseInputs mouseInputs
+        - Game game
+
+            +  GamePanel(Game game)
+            +  void updateGame()
+            +  void paintComponent(Graphics g)
+            +  Game getGame()
+            - void setPanelSize()
+    }
+
+    class GameWindow {
+        - JFrame jframe 
+
+            +  GameWindow(GamePanel gamePanel)
+    }
+
+    class MainClass {
+            +  {static} void main(String[] args)
+    }
+}
+
+package Onjects{
+    class Cannon extends GameObjects{
+        - int tileY 
+
+            +  Cannon(int x, int y, int objectType)
+            +  void update()
+            +  int getTileY()
+    }
+
+    class GameContainer extends GameObjects{
+
+            +  GameContainer(int x, int y, int objectType)
+            +  void update()
+            - void creatHitbox()
+    }
+
+    class GameObjects {
+        # int x, y, objectType
+        # Rectangle2D.Float hitbox
+        # boolean doAnimation, active = true
+        # int aniTick, aniIndex
+        # int xDrawOffset, yDrawOffset
+
+            +  GameObjects(int x, int y, int objectType)
+            +  void reset()
+            +  void drawHitbox(Graphics g, int xLvOffset)
+            +  int getObjectType()
+            +  Rectangle2D.Float getHitbox()
+            +  boolean isActive()
+            +  void setActive(boolean active)
+            +  void setAnimation(boolean doAnimation)
+            +  int getxDrawOffset()
+            +  int getyDrawOffset()
+            +  int getAniIndex()
+            +  int getAniTick()
+            # void updateAniTick()
+            # void initHitbox(int width, int height)
+    }
+
+    class ObjectManager {
+        - Playing playing
+        - BufferedImage[][] potionImgs, containerImgs
+        - BufferedImage[] cannonImgs
+        - BufferedImage spike_Trap_Img, cannonBallImgs
+        - ArrayList<Potion> potions
+        - ArrayList<GameContainer> containers
+        - ArrayList<Spike_Trap> spikeTraps
+        - ArrayList<Cannon> cannons
+        - ArrayList<Projectile> projectile
+
+            +  ObjectManager(Playing playing)
+            +  void checkSpikeTrapTouched(Player p)
+            +  void checkObjTouchPlayer(Rectangle2D.Float hitbox)
+            +  void applyEffectToPlayer(Potion p)
+            +  void checkObjHit(Rectangle2D.Float attack_box)
+            +  void loadObject(Level newLevel)
+            +  void update(int[][] lvData, Player player)
+            +  void draw(Graphics g, int xLvOffset)
+            +  void resetAllObj()
+            - void loadImgs()
+            - void updateProjectile(int[][] lvData, Player player)
+            - void updateCannon(int[][] lvData, Player player)
+            - void shootCannon(Cannon c)
+            - boolean isPlayerInFrontOfCannon(Cannon c, Player player)
+            - boolean isPlayerInRange(Cannon c, Player player)
+            - void drawProjectile(Graphics g, int xLvOffset)
+            - void drawCannon(Graphics g, int xLvOffset)
+            - void drawSpikeTraps(Graphics g, int xLvOffset)
+            - void drawContainer(Graphics g, int xLvOffset)
+            - void drawPotions(Graphics g, int xLvOffset)
+
+    }
+
+    class Potion extends GameObjects {
+        - float hoverOffset 
+        - int maxHoverOffset, hoverDirection = 1 
+
+            +  Potion(int x, int y, int objectType)
+            +  void update()
+            - void updateHover()
+    }
+
+    class Projectile {
+        - Rectangle2D.Float hitbox 
+        - int dir 
+        - boolean active = true 
+
+            +  Projectile(int x, int y, int dir)
+            +  void updatePosition()
+            +  void setPos(int x, int y)
+            +  Rectangle2D.Float getHitbox()
+            +  void setActive(boolean active)
+            +  boolean isActive()
+    }
+
+    class Spike_Trap extends GameObjects{
+            +  Spike_Trap(int x, int y, int objectType)
+    }
+}
+
+package UI{
+    class AudioOptions {
+        - Game game 
+        - SoundButtons musicButton, sfxButton 
+        - VolumeButtom volumeButtom 
+
+            +  AudioOptions(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mouseDragged(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            - void createVolumeButtons()
+            - void createSoundButton()
+    }
+
+    class GameOverOverlay {
+        - Playing playing
+        - BufferedImage img
+        - int imgX, imgY, imgWidth, imgHeight
+        - URMButton menu, play
+
+            +  GameOverOverlay(Playing playing)
+            +  void createButton()
+            +  void draw(Graphics g)
+            +  void update()
+            +  void keyPressed(KeyEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            - void createImg()
+            - boolean isIn(URMButton b, MouseEvent e)
+    }
+
+    class LevelCompletedOverlay {
+        - Playing playing
+        - URMButton menu, next
+        - BufferedImage img
+        - int bgX, bgY, bgW, bgH
+
+            +  LevelCompletedOverlay(Playing playing)
+            +  void draw(Graphics g)
+            +  void update()
+            +  void mouseReleased(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            - void initButtons()
+            - void initImg()
+            - boolean isIn(URMButton b, MouseEvent e)
+    }
+
+    class MenuButton {
+        - int xPos, yPos, rowIndex, index
+        - int xOffsetCenter = B_WIDTH / 2
+        - GameStates state
+        - BufferedImage[] imgs
+        - boolean mouseOver,mousePressed
+        - Rectangle bounds
+
+            +  MenuButton(int xPos, int yPos, int rowIndex, GameStates state)
+            +  void draw(Graphics g)
+            +  void update()
+            +  void applyGameState()
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  Rectangle getBounds()
+            +  GameStates getState()
+            - void initBounds()
+            - void loadImgs()
+    }
+
+    class PauseButton {
+        # int x, y, width, height
+        # Rectangle bounds
+
+            +  PauseButton(int x, int y, int width, int height)
+            +  int getX()
+            +  void setX(int x)
+            +  int getY()
+            +  void setY(int y)
+            +  int getWidth()
+            +  void setWidth(int width)
+            +  int getHeight()
+            +  void setHeight(int height)
+            +  Rectangle getBounds()
+            +  void setBounds(Rectangle bounds)
+            - void createBounds()
+    }
+
+    class PauseOverlay {
+        - BufferedImage backgroundImg
+        - int bgX, bgY, bgW, bgH
+        - URMButton menuB, replayB, unpauseB
+        - Playing playing
+        - AudioOptions audioOptions
+
+
+            +  PauseOverlay(Playing playing)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            - void createURMButtons()
+            - void loadBackground()
+    }
+
+    class SoundButtons extends PauseButton{
+        - BufferedImage[][] soundImgs
+        - boolean mouseOver, mousePressed
+        - boolean muted
+        - int rowIndex, colIndex
+
+            +  SoundButtons(int x, int y, int width, int height)
+            +  void update()
+            +  void resetBools()
+            +  void draw(Graphics g)
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  boolean isMuted()
+            +  void setMuted(boolean muted)
+            - void loadSoundImgs()
+    }
+
+    class URMButton extends PauseButton{
+        - BufferedImage[] UrmImgs
+        - int rowIndex, index
+        - boolean mouseOver, mousePressed
+
+            +  URMButton(int x, int y, int width, int height, int rowIndex)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            - void loadUrmImgs()
+    }
+
+    class VolumeButtom extends PauseButton{
+        - BufferedImage[] volumeImgs
+        - BufferedImage slider
+        - int index = 0
+        - boolean mouseOver, mousePressed
+        - int buttonX, minX, maxX
+        - float floatValue = 0f
+
+            +  VolumeButtom(int x, int y, int width, int height)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void changeX(int x)
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  float getFloatValue()
+            - void loadVolumeImgs()
+            - void updateFloatValue()
+    }
+}
+
+package Utilize{
+    class Constants {
+        + {static}  float GRAVITY = 0.04f * Game.SCALE;
+        + {static}  int ANI_SPEED = 30;
+
+        + {static}  int CANNON_BALL_DEFAULT_WIDTH = 15;
+        + {static}  int CANNON_BALL_DEFAULT_HEIGHT = 15;
+        + {static}  int CANNON_BALL_WIDTH = (int) (CANNON_BALL_DEFAULT_WIDTH * Game.SCALE);
+        + {static}  int CANNON_BALL_HEIGHT = (int) (CANNON_BALL_DEFAULT_HEIGHT * Game.SCALE);
+        + {static}  float SPEED = 0.5f * Game.SCALE;
+
+        + {static}  int RED_POTION = 0;
+        + {static}  int BLUE_POTION = 1;
+        + {static}  int BARREL = 2;
+        + {static}  int BOX = 3;
+        + {static}  int SPIKE_TRAP = 4;
+        + {static}  int CANNON_LEFT = 5;
+        + {static}  int CANNON_RIGHT = 6;
+        + {static}  int RED_POTION_VALUE = 20;
+        + {static}  int BLUE_POTION_VALUE = 20;
+        + {static}  int CONTAINER_WIDTH_DEFAULT = 40;
+        + {static}  int CONTAINER_HEIGHT_DEFAULT = 30;
+        + {static}  int CONTAINER_WIDTH = (int) (Game.SCALE * CONTAINER_WIDTH_DEFAULT);
+        + {static}  int CONTAINER_HEIGHT = (int) (Game.SCALE * CONTAINER_HEIGHT_DEFAULT);
+        + {static}  int POTION_WIDTH_DEFAULT = 12;
+        + {static}  int POTION_HEIGHT_DEFAULT = 16;
+        + {static}  int POTION_WIDTH = (int) (Game.SCALE * POTION_WIDTH_DEFAULT);
+        + {static}  int POTION_HEIGHT = (int) (Game.SCALE * POTION_HEIGHT_DEFAULT);
+        + {static}  int SPIKE_TRAP_WIDTH_DEFAULT = 32;
+        + {static}  int SPIKE_TRAP_HEIGHT_DEFAULT = 32;
+        + {static}  int SPIKE_TRAP_WIDTH = (int) (Game.SCALE * SPIKE_TRAP_WIDTH_DEFAULT);
+        + {static}  int SPIKE_TRAP_HEIGHT = (int) (Game.SCALE * SPIKE_TRAP_HEIGHT_DEFAULT);
+        + {static}  int CANNON_WIDTH_DEFAULT = 40;
+        + {static}  int CANNON_HEIGHT_DEFAULT = 26;
+        + {static}  int CANNON_WIDTH = (int) (CANNON_WIDTH_DEFAULT * Game.SCALE);
+        + {static}  int CANNON_HEIGHT = (int) (CANNON_HEIGHT_DEFAULT * Game.SCALE);
+            + {static} int GetSpriteAmount(int object_type)
+
+        + {static}  int B_WIDTH_DEFAULT = 140;
+        + {static}  int B_HEIGHT_DEFAULT = 56;
+        + {static}  int B_WIDTH = (int) (B_WIDTH_DEFAULT * Game.SCALE);
+        + {static}  int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * Game.SCALE);
+
+        + {static}  int SOUND_SIZE_DEFAULT = 42;
+        + {static}  int SOUND_SIZE = (int)(SOUND_SIZE_DEFAULT * Game.SCALE);
+
+        + {static}  int URM_SIZE_DEFAULT = 56;
+        + {static}  int URM_SIZE = (int) (URM_SIZE_DEFAULT * Game.SCALE);
+
+        + {static}  int VOLUME_SIZE_DEFAULT_WIDTH = 28;
+        + {static}  int VOLUME_SIZE_DEFAULT_HEIGHT = 44;
+        + {static}  int SLIDER_DEFAULT_WIDTH = 215;
+        + {static}  int VOLUME_WIDTH = (int) (VOLUME_SIZE_DEFAULT_WIDTH * Game.SCALE);
+        + {static}  int VOLUME_HEIGHT = (int) (VOLUME_SIZE_DEFAULT_HEIGHT * Game.SCALE);
+        + {static}  int SLIDER_WIDTH = (int) (SLIDER_DEFAULT_WIDTH * Game.SCALE);
+
+        + {static}  int LEFT = 0;
+        + {static}  int UP = 1;
+        + {static}  int RIGHT = 2;
+        + {static}  int DOWN = 3;
+
+        + {static}  int IDLE = 0;
+        + {static}  int RUNNING = 1;
+        + {static}  int JUMP = 2;
+        + {static}  int FALLING = 3;
+        + {static}  int ATTACK = 4;
+        + {static}  int HIT = 5;
+        + {static}  int DEAD = 6;
+             + {static} int GetSpriteAmount(int player_action)
+
+        + {static}  int MONSTER = 0;
+        + {static}  int IDLE = 0;
+        + {static}  int RUNNING = 1;
+        + {static}  int ATTACK = 2;
+        + {static}  int HIT = 3;
+        + {static}  int DEAD = 4;
+        + {static}  int MONSTER_WIDTH_DEFAULT = 72;
+        + {static}  int MONSTER_HEIGHT_DEFAULT = 32;
+        + {static}  int MONSTER_WIDTH = (int) (MONSTER_WIDTH_DEFAULT * Game.SCALE);
+        + {static}  int MONSTER_HEIGHT = (int) (MONSTER_HEIGHT_DEFAULT * Game.SCALE);
+        + {static}  int MONSTER_DRAWOFFSET_X = (int) (26 * Game.SCALE);
+        + {static}  int MONSTER_DRAWOFFSET_Y = (int) (9 * Game.SCALE);
+            + {static} int getSpriteAmount(int enemy_type, int enemy_state)
+            + {static} int getMaxHealth(int enemy_type)
+            + {static} int getEnemyDamage(int enemy_type)    
+    }
+'
+'
+    class HelpMethods {
+        + {static} boolean CanMoveHere(float x, float y, float width, float height, int[][] lvData)
+        + {static} boolean isSolid(float x, float y, int[][] lvData)
+        + {static} boolean isProjectileHittingLevel(Projectile p, int[][] lvData )
+        + {static} boolean isTileSolid(int XTile, int YTile, int[][] lvData)
+        + {static} float GetEntityXPosNextToWall(Rectangle2D.Float hitbox, float xSpeed)
+        + {static} float GetEntityXPosUnderRoofOrAboveFloor(Rectangle2D.Float hitbox, float airSpeed)
+        + {static} boolean IsEntityOnFloor(Rectangle2D.Float hitbox, int[][] lvData)
+        + {static} boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvData)
+        + {static} boolean canCannonSeePlayer(int[][] lvData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile)
+        + {static} boolean isAllTilesClear(int xStart, int xEnd, int y, int[][] lvData)
+        + {static} boolean isAllTileWalkable(int xStart, int xEnd, int y, int[][] lvData)
+        + {static} boolean isSightClear ( int[][] lvData, Rectangle2D.Float enemyBox, Rectangle2D.Float playerBox, int yTile)
+        + {static} int[][] GetLevelData(BufferedImage img)
+        + {static} ArrayList<Monster> GetMonsters(BufferedImage img)
+        + {static} ArrayList<Potion> GetPotions(BufferedImage img)
+        + {static} ArrayList<GameContainer> GetContainer(BufferedImage img)
+        + {static} ArrayList<Spike_Trap> GetSpikeTraps(BufferedImage img)
+        + {static} ArrayList<Cannon> GetCannon(BufferedImage img)
+        + {static} Point GetPlayerSpawn(BufferedImage img)
+   }
+
+    
+    class LoadSave {
+        + {static}  String PLAYER_ATLAS = "player_sprites.png";
+        + {static}  String LEVEL_ATLAS = "outside_sprites.png";
+        + {static}  String MENU_BUTTONS = "button_atlas.png";
+        + {static}  String MENU_BACKGROUND = "menu_background.png";
+        + {static}  String PAUSE_BACKGROUND = "pause_menu.png";
+        + {static}  String SOUND_BUTTONS = "sound_button.png";
+        + {static}  String URM_BUTTONS = "urm_buttons.png";
+        + {static}  String VOLUME_BUTTONS = "volume_buttons.png";
+        + {static}  String MENU_BACKGROUND_IMG = "bg2D.png";
+        + {static}  String PLAYING_BACKGROUND_IMG = "playing_bg_2d.png";
+        + {static}  String MONSTER_SPRITE = "snow_monster_sprite.png";
+        + {static}  String STATUS_BAR = "health_power_bar.png";
+        + {static}  String COMPLETED_IMG = "completed_sprite.png";
+        + {static}  String CONTAINER_ATLAS = "objects_sprites.png";
+        + {static}  String POTION_ATLAS = "potions_sprites.png";
+        + {static}  String TRAP_ATLAS = "trap_atlas.png";
+        + {static}  String CANNON_ATLAS = "cannon_atlas.png";
+        + {static}  String CANNON_BALL = "projectile.png";
+        + {static}  String DEATH_SCREEN = "death_screen.png";
+        + {static}  String OPTIONS_MENU = "options_background.png";
+
+            + {static} BufferedImage GetSpriteAtlas(String filename)
+            + {static} BufferedImage[] GetAllLevel()
+   }
+}
+
+@enduml

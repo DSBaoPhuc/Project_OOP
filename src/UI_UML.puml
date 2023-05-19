@@ -1,0 +1,171 @@
+@startuml
+package UI{
+    class AudioOptions {
+        - Game game
+        - SoundButtons musicButton, sfxButton
+        - VolumeButtom volumeButtom
+
+            +  AudioOptions(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mouseDragged(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            - void createVolumeButtons()
+            - void createSoundButton()
+    }
+
+    class GameOverOverlay {
+        - Playing playing
+        - BufferedImage img
+        - int imgX, imgY, imgWidth, imgHeight
+        - URMButton menu, play
+
+            +  GameOverOverlay(Playing playing)
+            +  void createButton()
+            +  void draw(Graphics g)
+            +  void update()
+            +  void keyPressed(KeyEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            - void createImg()
+            - boolean isIn(URMButton b, MouseEvent e)
+    }
+
+    class LevelCompletedOverlay {
+        - Playing playing
+        - URMButton menu, next
+        - BufferedImage img
+        - int bgX, bgY, bgW, bgH
+
+            +  LevelCompletedOverlay(Playing playing)
+            +  void draw(Graphics g)
+            +  void update()
+            +  void mouseReleased(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            - void initButtons()
+            - void initImg()
+            - boolean isIn(URMButton b, MouseEvent e)
+    }
+
+    class MenuButton {
+        - int xPos, yPos, rowIndex, index
+        - int xOffsetCenter = B_WIDTH / 2
+        - GameStates state
+        - BufferedImage[] imgs
+        - boolean mouseOver,mousePressed
+        - Rectangle bounds
+
+            +  MenuButton(int xPos, int yPos, int rowIndex, GameStates state)
+            +  void draw(Graphics g)
+            +  void update()
+            +  void applyGameState()
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  Rectangle getBounds()
+            +  GameStates getState()
+            - void initBounds()
+            - void loadImgs()
+    }
+
+    class PauseButton {
+        # int x, y, width, height
+        # Rectangle bounds
+
+            +  PauseButton(int x, int y, int width, int height)
+            +  int getX()
+            +  void setX(int x)
+            +  int getY()
+            +  void setY(int y)
+            +  int getWidth()
+            +  void setWidth(int width)
+            +  int getHeight()
+            +  void setHeight(int height)
+            +  Rectangle getBounds()
+            +  void setBounds(Rectangle bounds)
+            - void createBounds()
+    }
+
+    class PauseOverlay {
+        - BufferedImage backgroundImg
+        - int bgX, bgY, bgW, bgH
+        - URMButton menuB, replayB, unpauseB
+        - Playing playing
+        - AudioOptions audioOptions
+
+
+            +  PauseOverlay(Playing playing)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            - void createURMButtons()
+            - void loadBackground()
+    }
+
+    class SoundButtons extends PauseButton{
+        - BufferedImage[][] soundImgs
+        - boolean mouseOver, mousePressed
+        - boolean muted
+        - int rowIndex, colIndex
+
+            +  SoundButtons(int x, int y, int width, int height)
+            +  void update()
+            +  void resetBools()
+            +  void draw(Graphics g)
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  boolean isMuted()
+            +  void setMuted(boolean muted)
+            - void loadSoundImgs()
+    }
+
+    class URMButton extends PauseButton{
+        - BufferedImage[] UrmImgs
+        - int rowIndex, index
+        - boolean mouseOver, mousePressed
+
+            +  URMButton(int x, int y, int width, int height, int rowIndex)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            - void loadUrmImgs()
+    }
+
+    class VolumeButtom extends PauseButton{
+        - BufferedImage[] volumeImgs
+        - BufferedImage slider
+        - int index = 0
+        - boolean mouseOver, mousePressed
+        - int buttonX, minX, maxX
+        - float floatValue = 0f
+
+            +  VolumeButtom(int x, int y, int width, int height)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void changeX(int x)
+            +  void resetBools()
+            +  boolean isMouseOver()
+            +  void setMouseOver(boolean mouseOver)
+            +  boolean isMousePressed()
+            +  void setMousePressed(boolean mousePressed)
+            +  float getFloatValue()
+            - void loadVolumeImgs()
+            - void updateFloatValue()
+    }
+}
+@enduml

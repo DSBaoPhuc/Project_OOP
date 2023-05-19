@@ -1,0 +1,37 @@
+@startuml
+package Audio{
+    class AudioPlayer {
+        + {static} int MENU_1 = 0
+        + {static} int LEVEL_1 = 1
+        + {static} int LEVEL_2 = 2
+        + {static} int DIE = 0
+        + {static} int JUMP = 1
+        + {static} int GAMEOVER = 2
+        + {static} int LVL_COMPLETED = 3
+        + {static} int ATTACK_1 = 4
+        + {static} int ATTACK_2 = 5
+        + {static} int ATTACK_3 = 6
+        - Clip[] songs, effects
+        - int currentSongId
+        - float volume = 1f
+        - boolean songMute, effectMute
+
+            + AudioPlayer()
+            + void setVolume(float volume)
+            + void stopSong()
+            + void setLvSong(int lvIndex)
+            + void lvCompleted()
+            + void toggleEffectMute()
+            + void playEffect(int effect)
+            + void playAtkSound()
+            + void toggleSongMute()
+            + void playSong(int song)
+            - Clip getCLip(String name)
+            - void loadSong()
+            - void loadEffect()
+            - void updateSongVolume()
+            - void updateEffectVolume()
+            - Random rand = new Random()
+    }
+}
+@enduml

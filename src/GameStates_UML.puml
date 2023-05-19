@@ -1,0 +1,120 @@
+@startuml
+package GameStates{
+    class GameOptions extends State implements StateMethods{
+        - AudioOptions audioOptions
+        - BufferedImage bgImg, optionsBgImg
+        - int bgX, bgY, bgW, bgH
+        - URMButton menuB
+
+            +  GameOptions(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  boolean isInside(MouseEvent e, PauseButton b)
+            +  void mouseDragged(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void mouseClicked(MouseEvent e)
+            - void loadButtonn()
+            - void loadImgs()
+    }
+
+    enum GameStates {
+        PLAYING, MENU, OPTIONS, QUIT
+        +  {static} GameStates state = MENU
+    }
+
+    class Menu extends State implements StateMethods{
+        - MenuButton[] buttons = new MenuButton[3]
+        - BufferedImage backgroundImg, backgroundMenu
+        - int menuX, menuY, menuWidth, menuHeight
+
+            + Menu(Game game)
+            +  void mouseMoved(MouseEvent e)
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            - void resetButtons()
+            - void loadBackground()
+            - void loadButtons()
+
+    }
+
+    class Playing extends State implements StateMethods {
+        - Player player
+        - LevelManager levelManager
+        - EnemyManager enemyManager
+        - ObjectManager objectManager
+        - PauseOverlay pauseOverlay
+        - GameOverOverlay gameOverOverlay
+        - LevelCompletedOverlay levelCompletedOverlay
+        - boolean paused = false
+        - int xLvOffset
+        - int leftBorder = (int) (0.2 * Game.GAME_WIDTH)
+        - int rightBorder = (int) (0.8 * Game.GAME_WIDTH)
+        - int maxLvOffsetX
+        - boolean gameOver
+        - boolean lvCompleted
+        - BufferedImage backgroundImg
+        - boolean playerDying
+
+            +  Playing(Game game)
+            +  void update()
+            +  void draw(Graphics g)
+            +  void loadNextLevel()
+            +  void resetAll()
+            +  void checkEnemyHit(Rectangle2D.Float attackBox)
+            +  void checkPotionTouched(Rectangle2D.Float hitbox)
+            +  void checkSpikeTrapTouched(Player p)
+            +  void checkObjHit(Rectangle2D.Float attackBox)
+            +  void setGameOver(boolean gameOver)
+            +  void mouseDragged(MouseEvent e)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void unpauseGame()
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void setLevelCompleted (boolean levelCompleted)
+            +  void setMaxLvOffset(int lvOffset)
+            +  Player getPlayer()
+            +  void windowFocusLost()
+            +  EnemyManager getEnemyManager()
+            +  ObjectManager getObjectManager()
+            +  LevelManager getLevelManager()
+            +  void setPlayerDying(boolean b)
+            - void initClasses()
+            - void loadStartLevel()
+            - void calculateLevelOffset()
+            - void checkCloseBorder()
+    }
+
+    class State {
+        # Game game
+
+            +  boolean isInside(MouseEvent e, MenuButton mb)
+            +  State(Game game)
+            +  Game getGame()
+            +  void setGameState(GameStates state)
+    }
+
+    interface StateMethods {
+            +  void update()
+            +  void draw(Graphics g)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseMoved(MouseEvent e)
+            +  void keyPressed(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+    }
+}
+
+@enduml

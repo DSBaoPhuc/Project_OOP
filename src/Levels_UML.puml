@@ -1,0 +1,52 @@
+@startuml
+package Levels{
+    class Level {
+        - BufferedImage img
+        - int[][] lvData
+        - ArrayList<Monster> monters
+        - ArrayList<Potion> potions
+        - ArrayList<Spike_Trap> spikeTraps
+        - ArrayList<GameContainer> containers
+        - ArrayList<Cannon> cannons
+        - int lvTilesWide
+        - int maxTilesOffset
+        - int maxLvOffsetX
+        - Point playerSpawn
+
+            +  Level (BufferedImage img)
+            +  int getSpriteIndex(int x, int y)
+            +  int[][] getLevelData()
+            +  int getLvOffset()
+            +  ArrayList<Monster> getMonsters()
+            +  Point getPlayerSpawn()
+            +  ArrayList<Potion> getPotions()
+            +  ArrayList<GameContainer> getContainers()
+            +  ArrayList<Spike_Trap> getSpikeTraps()
+            +  ArrayList<Cannon> getCannons()
+            - void createCannon()
+            - void createSpikeTraps()
+            - void createContainer()
+            - void createPotion()
+            - void calculatePlayerSpawn()
+            - void calculateLvOffset()
+            - void createEnemies()
+            - void createLevelData()
+    }
+
+    class LevelManager {
+        - Game game
+        - BufferedImage[] levelSprite
+        - ArrayList<Level> levels
+        - int lvIndex = 0
+
+            +  LevelManager(Game game)
+            +  void loadNextLevel()
+            +  void draw(Graphics g, int lvOffset)
+            +  void update()
+            +  Level getCurrentLevel()
+            - void buildAllLevels()
+            - void importOutsideSprites()
+    }
+}
+
+@enduml

@@ -1,0 +1,153 @@
+@startuml
+package Entities{
+    class Enemy extends Entity{
+        # int enemyType
+        # boolean firstUpdate = true
+        # float walkSpeed = 0.5f * Game.SCALE
+        # float walkDirection = LEFT
+        # int tileY
+        # float attackDistance = Game.TILES_SIZE
+        # boolean active = true
+        # boolean attackChecked
+
+            + Enemy(float x, float y, int width, int height, int enemyType)
+            + void hurt(int amount)
+            + void resetEnemy()
+            + boolean isActive()
+            - boolean isPlayerInRange(Player player)
+            # void firstUpdateCheck(int[][] lvData)
+            # void updateInAir(int[][] lvData)
+            # void move(int[][] lvData)
+            # void turnTowardsPlayer(Player player)
+            # boolean canSeePlayer(int[][] lvData, Player player)
+            # boolean isPlayerCloseForAttack(Player player)
+            # void newState(int enemyState)
+            # void checkPlayerHit(Rectangle2D.Float attackBox, Player player)
+            # void updateAniTick()
+            # void changWalkDirection()
+
+    }
+    class EnemyManager {
+        - Playing playing
+        - BufferedImage[][] monsterArr
+        - ArrayList <Monster> mons
+
+            + EnemyManager(Playing playing)
+            + void loadEnemies(Level level)
+            + void checkEnemyHit(Rectangle2D.Float attackBox)
+            + void resetAllEnemies()
+            + void update(int[][] lvData, Player player)
+            + void draw(Graphics g, int xLvOffset)
+            - void loadEnemyImgs()
+            - void drawMonsters(Graphics g, int xLvOffset)
+    }
+
+    abstract class Entity {
+        # float x,y
+        # int width,height
+        # Rectangle2D.Float hitbox
+        # int aniTick, aniIndex
+        # int state
+        # float airSpeed
+        # boolean inAir = false
+        # int maxHealth
+        # int currentHealth
+        # Rectangle2D.Float attackBox
+        # float walkSpeed = 1.0f * Game.SCALE
+
+            + Entity (float x, float y, int width, int height)
+            + int getState()
+            + Rectangle2D.Float getHitbox()
+            + int getAniIndex()
+            + int getCurrentHealth()
+            # void drawAttack(Graphics g, int xlvOffset)
+            # void drawHitbox(Graphics g, int xLvOffset)
+            # void initHitbox(int width, int height)
+
+    }
+
+    class Monster extends Enemy {
+        + Monster(float x, float y)
+        + void update(int[][] lvData, Player player)
+        + int flipX()
+        + int flipW()
+        - void initAttackBox()
+        - int attackBoxOffsetX
+        - void updateAttackBox()
+        - void updateBehavior(int[][] lvData, Player player)
+    }
+
+    class Player extends Entity {
+        - BufferedImage[][] animations
+        - boolean left,right,jump
+        - boolean moving = false, attacking = false
+        - int[][] levelData
+        - float xDrawOffset = 21 * Game.SCALE
+        - float yDrawOffset = 4 * Game.SCALE
+        - float jumpSpeed = -2.25f * Game.SCALE
+        - float fallSpeedAfterCollision = 0.5f * Game.SCALE
+        - BufferedImage statusBarImg
+        - int statusBarWidth = (int) (192 * Game.SCALE)
+        - int statusBarHeight = (int) (58 * Game.SCALE)
+        - int statusBarX = (int) (10 * Game.SCALE)
+        - int statusBarY = (int) (10 * Game.SCALE)
+        - int healthBarWidth = (int) (150 * Game.SCALE)
+        - int healthBarHeight = (int) (4 * Game.SCALE)
+        - int healthBarXStart = (int) (34 * Game.SCALE)
+        - int healthBarYStart = (int) (14 * Game.SCALE)
+        - int healthWidth = healthBarWidth
+        - int flipX = 0
+        - int flipW = 1
+        - int tileY = 0
+        - boolean attackChecked
+        - Playing playing
+        - int powerBarWidth = (int) (104 * Game.SCALE)
+        - int powerBarHeight = (int) (2 * Game.SCALE)
+        - int powerBarXStart = (int) (44 * Game.SCALE)
+        - int powerBarYStart = (int) (34 * Game.SCALE)
+        - int powerWidth = powerBarWidth
+        - int powerMaxValue = 200
+        - int powerValue = powerMaxValue
+        - boolean powerAttackActive
+        - int powerAttackTick
+        - int powerGrowSpeed = 15
+        - int powerGrowTick
+
+            + Player(float x, float y, int width, int height, Playing playing)
+            + void setSpawn(Point spawn)
+            + void update()
+            + void render(Graphics g, int lvOffset)
+            + void changeHealth(int value)
+            + void kill()
+            + void changePower(int value)
+            + void loadLevelData(int[][] levelData)
+            + void resetDirBoolean()
+            + void resetAll()
+            + void setAttacking(boolean attacking)
+            + boolean getLeft()
+            + void setLeft(boolean left)
+            + boolean getRight()
+            + void setRight(boolean right)
+            + void setJump(boolean jump)
+            + int getTileY()
+            + void powerAttack()
+            - void initAttackBox()
+            - void checkSpikeTrapTouched()
+            - void checkPotionTouched()
+            - void checkAttack()
+            - void updateAttackBox()
+            - void updateHealthBar()
+            - void updatePowerBar()
+            - void drawUI(Graphics g)
+            - void updateAniTick()
+            - void setAnimation()
+            - void resetAniTick()
+            - void updatePosition()
+            - void jump()
+            - void resetInAir()
+            - void updateXPos(float xSpeed)
+            - void loadAnimation()
+            - void resetAttackBox()
+    }
+}
+@enduml

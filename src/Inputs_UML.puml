@@ -1,0 +1,26 @@
+@startuml
+package Inputs{
+    class KeyBoardInputs implements KeyListener {
+        - GamePanel gamePanel
+
+            +  KeyBoardInputs(GamePanel gamePanel)
+            +  void keyTyped(KeyEvent e)
+            +  void keyReleased(KeyEvent e)
+            +  void keyPressed(KeyEvent e)
+    }
+
+    class MouseInputs implements MouseListener, MouseMotionListener {
+
+        - GamePanel gamePanel
+
+            +  MouseInputs(GamePanel gamePanel)
+            +  void mouseMoved(MouseEvent e)
+            +  void mouseClicked(MouseEvent e)
+            +  void mousePressed(MouseEvent e)
+            +  void mouseReleased(MouseEvent e)
+            +  void mouseEntered(MouseEvent e)
+            +  void mouseExited(MouseEvent e)
+            +  void mouseDragged(MouseEvent e)
+    }
+}
+@enduml

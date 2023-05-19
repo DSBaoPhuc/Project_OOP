@@ -45,6 +45,9 @@
 ### Demo
 * [Demo Video](https://clipchamp.com/watch/nTak3HbyH1q)
 
+### Class Diagrams
+* [UML](https://drive.google.com/drive/folders/1V7qjyP2sV_ZIToTB0FB-DudwxR8PT-sS?usp=sharing)
+
 ## Contact
 
 Tran Bao Phuc : [Facebook](https://www.facebook.com/baophuclyk18.cla/) 

@@ -13,12 +13,9 @@ public class Constants {
         public static final int CANNON_BALL_HEIGHT = (int) (CANNON_BALL_DEFAULT_HEIGHT * Game.SCALE);
 
         public static final float SPEED = 0.5f * Game.SCALE;
-
-
     }
 
     public static class ObjectConstants{
-
         public static final int RED_POTION = 0;
         public static final int BLUE_POTION = 1;
         public static final int BARREL = 2;
@@ -67,7 +64,6 @@ public class Constants {
             public static final int B_WIDTH_DEFAULT = 140;
             public static final int B_HEIGHT_DEFAULT = 56;
             public static final int B_WIDTH = (int) (B_WIDTH_DEFAULT * Game.SCALE);
-
             public static final int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * Game.SCALE);
         }
 
@@ -85,7 +81,6 @@ public class Constants {
             public static final int VOLUME_SIZE_DEFAULT_WIDTH = 28;
             public static final int VOLUME_SIZE_DEFAULT_HEIGHT = 44;
             public static final int SLIDER_DEFAULT_WIDTH = 215;
-
             public static final int VOLUME_WIDTH = (int) (VOLUME_SIZE_DEFAULT_WIDTH * Game.SCALE);
             public static final int VOLUME_HEIGHT = (int) (VOLUME_SIZE_DEFAULT_HEIGHT * Game.SCALE);
             public static final int SLIDER_WIDTH = (int) (SLIDER_DEFAULT_WIDTH * Game.SCALE);
@@ -96,9 +91,7 @@ public class Constants {
         public static final int LEFT = 0;
         public static final int UP = 1;
         public static final int RIGHT = 2;
-
         public static final int DOWN = 3;
-
     }
 
 

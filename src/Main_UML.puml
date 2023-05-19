@@ -1,0 +1,58 @@
+@startuml
+package Main{
+    class Game implements Runnable {
+        +  {static}  int TILES_DEFAULT_SIZE = 32
+        +  {static}  float SCALE = 1.5f
+        +  {static}  int TILES_IN_WIDTH = 26
+        +  {static}  int TILES_IN_HEIGHT = 14
+        +  {static}  int TILES_SIZE = (int)(TILES_DEFAULT_SIZE * SCALE)
+        +  {static}  int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH
+        +  {static}  int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT
+        - GameWindow gameWindow
+        - GamePanel gamePanel
+        - Thread gameThread
+        -  int FPS_SET = 120
+        -  int UPS_SET = 200
+        - Playing playing
+        - Menu menu
+        - GameOptions gameOptions
+        - AudioOptions audioOptions
+        - AudioPlayer audioPlayer
+
+            +  Game()
+            +  void update()
+            +  void render(Graphics g)
+            +  void run()
+            +  void windowFocusLost()
+            +  Menu getMenu()
+            +  Playing getPlaying()
+            +  AudioOptions getAudioOptions()
+            +  GameOptions getGameOptions()
+            +  AudioPlayer getAudioPlayer()
+            - void initClasses()
+            - void startGameLoop()
+    }
+
+    class GamePanel extends JPanel {
+        - MouseInputs mouseInputs
+        - Game game
+
+            +  GamePanel(Game game)
+            +  void updateGame()
+            +  void paintComponent(Graphics g)
+            +  Game getGame()
+            - void setPanelSize()
+    }
+
+    class GameWindow {
+        - JFrame jframe
+
+            +  GameWindow(GamePanel gamePanel)
+    }
+
+    class MainClass {
+            +  {static} void main(String[] args)
+    }
+}
+
+@enduml

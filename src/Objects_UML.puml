@@ -1,0 +1,101 @@
+@startuml
+package Onjects{
+    class Cannon extends GameObjects{
+        - int tileY
+
+            +  Cannon(int x, int y, int objectType)
+            +  void update()
+            +  int getTileY()
+    }
+
+    class GameContainer extends GameObjects{
+
+            +  GameContainer(int x, int y, int objectType)
+            +  void update()
+            - void creatHitbox()
+    }
+
+    class GameObjects {
+        # int x, y, objectType
+        # Rectangle2D.Float hitbox
+        # boolean doAnimation, active = true
+        # int aniTick, aniIndex
+        # int xDrawOffset, yDrawOffset
+
+            +  GameObjects(int x, int y, int objectType)
+            +  void reset()
+            +  void drawHitbox(Graphics g, int xLvOffset)
+            +  int getObjectType()
+            +  Rectangle2D.Float getHitbox()
+            +  boolean isActive()
+            +  void setActive(boolean active)
+            +  void setAnimation(boolean doAnimation)
+            +  int getxDrawOffset()
+            +  int getyDrawOffset()
+            +  int getAniIndex()
+            +  int getAniTick()
+            # void updateAniTick()
+            # void initHitbox(int width, int height)
+    }
+
+    class ObjectManager {
+        - Playing playing
+        - BufferedImage[][] potionImgs, containerImgs
+        - BufferedImage[] cannonImgs
+        - BufferedImage spike_Trap_Img, cannonBallImgs
+        - ArrayList<Potion> potions
+        - ArrayList<GameContainer> containers
+        - ArrayList<Spike_Trap> spikeTraps
+        - ArrayList<Cannon> cannons
+        - ArrayList<Projectile> projectile
+
+            +  ObjectManager(Playing playing)
+            +  void checkSpikeTrapTouched(Player p)
+            +  void checkObjTouchPlayer(Rectangle2D.Float hitbox)
+            +  void applyEffectToPlayer(Potion p)
+            +  void checkObjHit(Rectangle2D.Float attack_box)
+            +  void loadObject(Level newLevel)
+            +  void update(int[][] lvData, Player player)
+            +  void draw(Graphics g, int xLvOffset)
+            +  void resetAllObj()
+            - void loadImgs()
+            - void updateProjectile(int[][] lvData, Player player)
+            - void updateCannon(int[][] lvData, Player player)
+            - void shootCannon(Cannon c)
+            - boolean isPlayerInFrontOfCannon(Cannon c, Player player)
+            - boolean isPlayerInRange(Cannon c, Player player)
+            - void drawProjectile(Graphics g, int xLvOffset)
+            - void drawCannon(Graphics g, int xLvOffset)
+            - void drawSpikeTraps(Graphics g, int xLvOffset)
+            - void drawContainer(Graphics g, int xLvOffset)
+            - void drawPotions(Graphics g, int xLvOffset)
+
+    }
+
+    class Potion extends GameObjects {
+        - float hoverOffset
+        - int maxHoverOffset, hoverDirection = 1
+
+            +  Potion(int x, int y, int objectType)
+            +  void update()
+            - void updateHover()
+    }
+
+    class Projectile {
+        - Rectangle2D.Float hitbox
+        - int dir
+        - boolean active = true
+
+            +  Projectile(int x, int y, int dir)
+            +  void updatePosition()
+            +  void setPos(int x, int y)
+            +  Rectangle2D.Float getHitbox()
+            +  void setActive(boolean active)
+            +  boolean isActive()
+    }
+
+    class Spike_Trap extends GameObjects{
+            +  Spike_Trap(int x, int y, int objectType)
+    }
+}
+@enduml
