@@ -1,0 +1,66 @@
+@startuml
+package Entities{
+    class Enemy extends Entity{
+        # int enemyType
+        # boolean firstUpdate = true
+        # float walkSpeed = 0.5f * Game.SCALE
+        # float walkDirection = LEFT
+        # int tileY
+        # float attackDistance = Game.TILES_SIZE
+        # boolean active = true
+        # boolean attackChecked
+
+            + Enemy(float x, float y, int width, int height, int enemyType)
+            + void hurt(int amount)
+            + void resetEnemy()
+            + boolean isActive()
+            - boolean isPlayerInRange(Player player)
+            # void firstUpdateCheck(int[][] lvData)
+            # void updateInAir(int[][] lvData)
+            # void move(int[][] lvData)
+            # void turnTowardsPlayer(Player player)
+            # boolean canSeePlayer(int[][] lvData, Player player)
+            # boolean isPlayerCloseForAttack(Player player)
+            # void newState(int enemyState)
+            # void checkPlayerHit(Rectangle2D.Float attackBox, Player player)
+            # void updateAniTick()
+            # void changWalkDirection()
+
+    }
+
+    abstract class Entity {
+        # float x,y
+        # int width,height
+        # Rectangle2D.Float hitbox
+        # int aniTick, aniIndex
+        # int state
+        # float airSpeed
+        # boolean inAir = false
+        # int maxHealth
+        # int currentHealth
+        # Rectangle2D.Float attackBox
+        # float walkSpeed = 1.0f * Game.SCALE
+
+            + Entity (float x, float y, int width, int height)
+            + int getState()
+            + Rectangle2D.Float getHitbox()
+            + int getAniIndex()
+            + int getCurrentHealth()
+            # void drawAttack(Graphics g, int xlvOffset)
+            # void drawHitbox(Graphics g, int xLvOffset)
+            # void initHitbox(int width, int height)
+
+    }
+
+    class Monster extends Enemy {
+        + Monster(float x, float y)
+        + void update(int[][] lvData, Player player)
+        + int flipX()
+        + int flipW()
+        - void initAttackBox()
+        - int attackBoxOffsetX
+        - void updateAttackBox()
+        - void updateBehavior(int[][] lvData, Player player)
+    }
+}
+@enduml
